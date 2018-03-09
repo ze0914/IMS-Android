@@ -655,9 +655,6 @@ public class NewIssue extends AppCompatActivity {
 
                         FileProcessCount++;
 
-//                Log.w("FileProcessCount",String.valueOf(FileProcessCount));
-//
-//                Log.w("mListAdapter",String.valueOf(mListAdapter.getCount()));
                         if (FileProcessCount == mListAdapter.getCount()) {
                             pDialog.hide();
 

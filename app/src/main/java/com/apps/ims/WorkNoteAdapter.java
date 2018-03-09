@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,8 +72,8 @@ public class WorkNoteAdapter extends BaseAdapter {
         TextView txt_WorkNote_Author = (TextView) v.findViewById(com.apps.ims.R.id.txt_WorkNote_Author);
         TextView txt_WorkNote_Date = (TextView) v.findViewById(com.apps.ims.R.id.txt_WorkNote_Date);
         TextView txt_WorkNote_Content = (TextView) v.findViewById(com.apps.ims.R.id.txt_WorkNote_Content);
-        IssueVideoPlay IssueVideoPlay =  (IssueVideoPlay) v.findViewById(com.apps.ims.R.id.IssueVideoPlay);
-        IssueVoicePlay IssueVoicePlay =  (IssueVoicePlay) v.findViewById(com.apps.ims.R.id.IssueVoicePlay);
+        IssueVideoPlay IssueVideoPlay = (IssueVideoPlay) v.findViewById(com.apps.ims.R.id.IssueVideoPlay);
+        IssueVoicePlay IssueVoicePlay = (IssueVoicePlay) v.findViewById(com.apps.ims.R.id.IssueVoicePlay);
 
         final String FilePath = GetServiceData.ServicePath + "/Get_File?FileName=" + WorkNote_List.get(position).GetFile();
 
@@ -115,49 +116,59 @@ public class WorkNoteAdapter extends BaseAdapter {
         } else {
 
 
-            String _ImagePath = FilePath;
 
-            if (_ImagePath.toLowerCase().contains("img")) {
-                _ImagePath = GetServiceData.getUrlFromImgTag(_ImagePath);
+            if (WorkNote_List.get(position).GetFile().length() > 0) {
+                String _ImagePath = FilePath;
+
+                if (_ImagePath.toLowerCase().contains("img")) {
+                    _ImagePath = GetServiceData.getUrlFromImgTag(_ImagePath);
+                }
+
+                final String Imagepath = _ImagePath;
+
+                IssueVideoPlay.setVisibility(View.GONE);
+                IssueVoicePlay.setVisibility(View.GONE);
+                Img_WorkNote.setVisibility(View.VISIBLE);
+
+                Glide
+                        .with(WorkNotecontext)
+                        .load(Imagepath)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(com.apps.ims.R.mipmap.progress_image)
+                        .into(new SimpleTarget<Bitmap>(100, 100) {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+
+                                Img_WorkNote.setImageBitmap(resource);
+
+                            }
+
+                            @Override
+                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                Img_WorkNote.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+
+                        imageZoom.ImagePath = Imagepath;
+
+                        Intent intent = new Intent(WorkNotecontext, imageZoom.class);
+
+                        WorkNotecontext.startActivity(intent);
+
+                    }
+                });
+            }
+            else
+            {
+                IssueVideoPlay.setVisibility(View.GONE);
+                IssueVoicePlay.setVisibility(View.GONE);
+                Img_WorkNote.setVisibility(View.GONE);
             }
 
-            final String Imagepath = _ImagePath;
-
-            IssueVideoPlay.setVisibility(View.GONE);
-            IssueVoicePlay.setVisibility(View.GONE);
-            Img_WorkNote.setVisibility(View.VISIBLE);
-
-            Glide
-                    .with(WorkNotecontext)
-                    .load(Imagepath)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(com.apps.ims.R.mipmap.progress_image)
-                    .into(new SimpleTarget<Bitmap>(100, 100) {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-
-                            Img_WorkNote.setImageBitmap(resource);
-
-                        }
-
-                        @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-//                            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-            Img_WorkNote.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-
-                    imageZoom.ImagePath = Imagepath;
-
-                    Intent intent = new Intent(WorkNotecontext, imageZoom.class);
-
-                    WorkNotecontext.startActivity(intent);
-
-                }
-            });
         }
 
 

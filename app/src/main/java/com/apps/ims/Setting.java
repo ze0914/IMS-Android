@@ -106,6 +106,10 @@ public class Setting extends Fragment implements SeekBar.OnSeekBarChangeListener
 
         String VersionExplain =
 
+                "(Ver 45.0) 20180129 Update \n" + " 1.Fix Issue WorkNote Photo Visible Error" +
+                        "\n" +
+                        "\n" +
+
                 "(Ver 44.0) 20180125 Update \n" + " 1.Fix Android Version Upgrade Issue" +
                         "\n" +
                         "\n" +

@@ -112,27 +112,35 @@ public class IssueChangeOwner extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                v.setVisibility(View.GONE);
+                if (!(SelectValue == null))
+                {
+                    v.setVisibility(View.GONE);
 
-                Change_Issue_Owner(IssueID, SelectValue);
+                    Change_Issue_Owner(IssueID, SelectValue);
 
-                String CommentTitle = "@Issue Owner Change";
+                    String CommentTitle = "@Issue Owner Change";
 
-                String CommentText = "◎Issue Owner Change： 『" + AuthorNameCN + " " + AuthorNameEN + "』change to 『" + SelectText + "』";
+                    String CommentText = "◎Issue Owner Change： 『" + AuthorNameCN + " " + AuthorNameEN + "』change to 『" + SelectText + "』";
 
-                //CommentText += "Reason: 『" + txt_Reason.getText().toString() + "』\n";
+                    //CommentText += "Reason: 『" + txt_Reason.getText().toString() + "』\n";
 
-                C_Comment_Insert(CommentText, IssueID);
+                    C_Comment_Insert(CommentText, IssueID);
 
-                List<String> WorkID_List = new ArrayList<String>();
+                    List<String> WorkID_List = new ArrayList<String>();
 
-                WorkID_List.add(0, SelectValue);
+                    WorkID_List.add(0, SelectValue);
 
-                WorkID_List.add(1, Author);
+                    WorkID_List.add(1, Author);
 
-                AppClass.Send_Notification(WorkID_List, CommentTitle, CommentText, "IssueInfo", "IssueInfo", IssueID, mContext);
+                    AppClass.Send_Notification(WorkID_List, CommentTitle, CommentText, "IssueInfo", "IssueInfo", IssueID, mContext);
 
-                finish();
+                    finish();
+                }
+                else
+                {
+                    AppClass.AlertMessage("Please Selected Owner", mContext);
+                }
+
             }
         });
 
